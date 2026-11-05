@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <string>
 #include <chrono>
@@ -28,6 +29,18 @@ public:
     Player() : player_id("0000000"), rating(0), behavior_score(0) {};
 
     Player(string id, int rating, int behavior_score) : player_id(id), rating(rating), behavior_score(behavior_score) {};
+
+    string getID(){
+        return player_id;
+    }
+    
+    int getRating(){
+        return rating;
+    }
+
+    int getBehaviorScore(){
+        return behavior_score;
+    }
 
     chrono::seconds::rep get_queue_time() const {
         return chrono::duration_cast<chrono::seconds>(
