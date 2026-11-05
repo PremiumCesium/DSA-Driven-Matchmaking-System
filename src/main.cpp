@@ -9,7 +9,6 @@ const string DATA_FILE = "./data/player_data.txt";
 vector<Player> player_vector;
 
 
-
 using namespace std;
 
 
