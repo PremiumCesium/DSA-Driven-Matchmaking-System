@@ -27,10 +27,11 @@ class Player {
 public:
     Player() : player_id("0000000"), rating(0), behavior_score(0) {};
 
+    Player(string id, int rating, int behavior_score) : player_id(id), rating(rating), behavior_score(behavior_score) {};
+
     chrono::seconds::rep get_queue_time() const {
         return chrono::duration_cast<chrono::seconds>(
             chrono::steady_clock::now() - queue_start).count();
     }
-
 
 };
