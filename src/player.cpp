@@ -34,4 +34,10 @@ public:
             chrono::steady_clock::now() - queue_start).count();
     }
 
+
+    int getRating() {return rating;}
+    int getBehaviorScore() {return behavior_score;}
+    string getPlayerId() {return player_id;}
+
+
 };
