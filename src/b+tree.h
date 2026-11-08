@@ -157,7 +157,7 @@ class b_plus_tree {
     Node* findLeaf(int rating) const{
         Node* current = root;
         if(!current){
-            return{};
+            return nullptr;
         }
 
         // go down the tree until we hit a leaf and then search it.
@@ -170,12 +170,7 @@ class b_plus_tree {
         }
         return current;
     }
-/*
-Still missing a remove player function that will help to dequeue a player and show that they've joined a match and also we 
-probably need to implement a range finger that will not only take people that have a specific mmr but also adjecent mmrs. This will help
-to actually find a queue if no one is in your mmr range and also since there are only 4 buckets per leaf, it's kind of impossible to fill a match at times.
-This should be pretty quick, I just need to traverse down like the find players by rating does and then also traverse horizontally through the next pointer.
-*/ 
+
 public:
     ~b_plus_tree(){
         deleteNode(root);
@@ -215,11 +210,26 @@ public:
         }
         return{};
     }
-    //still working on this
-    vector<string> matchmakePlayers(int minRating, int maxRating)const{
+    // this is the primary aspect of matchmaking, so it gets every player in the rating range provided and returns their ids as a vector of strings.
+    // From there we can just take 12 of these players to fill a match.
+    vector<string> findPlayersInRange(int minRating, int maxRating)const{
         vector<string> playersInRange;
         Node* current = findLeaf(minRating);
 
+        while(current != nullptr){
+            for(int i = 0; i < current->ratings.size(); i++){
+                if(current->ratings[i]>=minRating && current->ratings[i] <= maxRating){
+                    for(int j = 0; j < current->player_ids[i].size(); j++){
+                        playersInRange.push_back(current->player_ids[i][j]);
+                    }
+                }
+                else if(current->ratings[i]>maxRating){
+                    return playersInRange;
+                }
+            }
+            current = current->next;// go to to the next leaf
+        }
+        return playersInRange;
     }
 
     //remove a player when they join a match so that they're not in queue anymore.
@@ -244,6 +254,7 @@ public:
                     }
                 }
             }
+        }
         return false;
     }
 };
