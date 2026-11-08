@@ -28,6 +28,10 @@ struct Node {
 
 Node* root = nullptr;
 
+bool isRed(Node* node){
+    return node != nullptr && node->isRed();
+}
+
 Node* rotate_left(Node* node){
     Node* temp = node->right;
 
@@ -79,17 +83,17 @@ Node* insert_node(Node* node, int rating, const string& id){
 
 
     //Reds go to the left
-    if(node->right->isRed() && !node->left->isRed()){
+    if(isRed(node->right) && !isRed(node->left)){
         node = rotate_left(node);
     }
 
     //Consecutive Reds
-    if(node->left->isRed() && node->left->left->isRed()){
+    if(isRed(node->left) && isRed(node->left->left)){
         node = rotate_right(node);
     }
 
     //Two red children
-    if(node->left->isRed() && node->right->isRed()){
+    if(isRed(node->left) && isRed(node->right)){
         flip_colors(node);
     }
 
