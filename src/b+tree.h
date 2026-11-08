@@ -153,6 +153,23 @@ class b_plus_tree {
         delete node;
     }
 
+    //This is a helper to get down to the leaf node where a rating should be so I can just reuse it for findPlayersByRating, findPlayersInRange, and removePlayer.
+    Node* findLeaf(int rating) const{
+        Node* current = root;
+        if(!current){
+            return{};
+        }
+
+        // go down the tree until we hit a leaf and then search it.
+        while(!current->isLeaf){
+            int pos = 0;
+            while(pos<current->ratings.size() && rating >= current->ratings[pos]){
+                pos++;
+            }
+            current = current->children[pos];
+        }
+        return current;
+    }
 /*
 Still missing a remove player function that will help to dequeue a player and show that they've joined a match and also we 
 probably need to implement a range finger that will not only take people that have a specific mmr but also adjecent mmrs. This will help
@@ -185,18 +202,10 @@ public:
 
 
     vector<string> findPlayersByRating(int rating)const {
-        Node* current = root;
-        if(!current){
-            return{};
-        }
+        Node* current = findLeaf(rating);
 
-        // go down the tree until we hit a leaf and then search it.
-        while(!current->isLeaf){
-            int pos = 0;
-            while(pos<current->ratings.size() && rating >= current->ratings[pos]){
-                pos++;
-            }
-            current = current->children[pos];
+        if(!current){
+            return {};
         }
 
         for(int i = 0; i <current->ratings.size(); i++){
@@ -205,5 +214,36 @@ public:
             }
         }
         return{};
+    }
+    //still working on this
+    vector<string> matchmakePlayers(int minRating, int maxRating)const{
+        vector<string> playersInRange;
+        Node* current = findLeaf(minRating);
+
+    }
+
+    //remove a player when they join a match so that they're not in queue anymore.
+    bool removePlayer(int rating, const string& id){
+        Node* current = findLeaf(rating);
+        if(!current){
+            return false;
+        }
+
+        for(int i = 0; i < current->ratings.size(); i++){
+            //find the rating inside the leaf
+            if(current->ratings[i] == rating){
+                // find the player id in this rating's vector
+                for(int j = 0; j < current->player_ids[i].size(); j++){
+                    if(current->player_ids[i][j] == id){
+                        // shift everyone after j one spot to the left and pop the back which deletes that player id.
+                        for(int k = j; k < current->player_ids[i].size() - 1; k++){
+                            current->player_ids[i][k] = current->player_ids[i][k + 1];
+                        }
+                        current->player_ids[i].pop_back();
+                        return true;
+                    }
+                }
+            }
+        return false;
     }
 };
