@@ -6,7 +6,7 @@
 #include <cstdlib>
 #include "player.cpp"
 #include "red-black-tree.h"
-#include "b_tree.h"
+#include "b+tree.h"
 using namespace std;
 
 vector<Player> players;
@@ -151,7 +151,7 @@ int main()
                     clock_t endTime;
                     endTime = clock();
 
-                    redBlackTime = (endTime - startTime);
+                    redBlackTime = ((endTime - startTime) * 1000.0) / CLOCKS_PER_SEC;
 
                     RBinserted = true;
 
@@ -189,7 +189,7 @@ int main()
                     }
 
                     clock_t endTime = clock();
-                    bTreeTime = (endTime - startTime);
+                    bTreeTime = ((endTime - startTime) * 1000.0) / CLOCKS_PER_SEC;
 
                     Binserted = true;
 
@@ -235,7 +235,7 @@ int main()
                     }
 
                     clock_t endTime = clock();
-                    redBlackMatchTime = (endTime - startTime);
+                    redBlackMatchTime = ((endTime - startTime) * 1000.0) / CLOCKS_PER_SEC;
 
                     cout << "Red-Black Tree Matchmaking Time: " << redBlackMatchTime << " ms" << endl;
                     cout << "Red-Black Tree Matches Made: " << redBlackMatch << endl;
@@ -263,7 +263,7 @@ int main()
                         queue = queue - 12;
                     }
                     endTime = clock();
-                    bTreeMatchTime = (endTime - startTime);
+                    bTreeMatchTime = ((endTime - startTime) * 1000.0) / CLOCKS_PER_SEC;
 
                     match = true;
 
