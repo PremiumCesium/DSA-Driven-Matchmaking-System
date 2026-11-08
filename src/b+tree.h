@@ -212,15 +212,16 @@ public:
     }
     // this is the primary aspect of matchmaking, so it gets every player in the rating range provided and returns their ids as a vector of strings.
     // From there we can just take 12 of these players to fill a match.
-    vector<string> findPlayersInRange(int minRating, int maxRating)const{
-        vector<string> playersInRange;
+    vector<pair<string, int>> findPlayersInRange(int minRating, int maxRating)const{
+        vector<pair<string, int>> playersInRange;
         Node* current = findLeaf(minRating);
 
         while(current != nullptr){
             for(int i = 0; i < current->ratings.size(); i++){
                 if(current->ratings[i]>=minRating && current->ratings[i] <= maxRating){
+                    int rating = current->ratings[i];
                     for(int j = 0; j < current->player_ids[i].size(); j++){
-                        playersInRange.push_back(current->player_ids[i][j]);
+                        playersInRange.push_back({current->player_ids[i][j], rating}); 
                     }
                 }
                 else if(current->ratings[i]>maxRating){

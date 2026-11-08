@@ -211,6 +211,7 @@ int main()
             {
                 if(Binserted == true)
                 {
+            
                     int queue = 0;
                     int rating = 0;
 
@@ -240,28 +241,26 @@ int main()
                     cout << "Red-Black Tree Matchmaking Time: " << redBlackMatchTime << " ms" << endl;
                     cout << "Red-Black Tree Matches Made: " << redBlackMatch << endl;
 
+
+                    // B+ tree section
                     bTreeMatch = 0;
-                    queue = 0;
 
                     startTime = clock();
 
-                    rating = 0;
-
-                    while ( rating <= 5000)
-                    {
-                        vector<string> playerRating;
-                        playerRating = BTree.findPlayersByRating(rating);
-
-                        queue = queue + playerRating.size();
-
-                        rating = rating + 1;
+                    for(int minRating = 0; minRating <= 5000; minRating+=100){
+                        int maxRating = minRating+99;
+                        vector<pair<string,int>> pool = BTree.findPlayersInRange(minRating, maxRating);
+                        while(pool.size()>=12){
+                            bTreeMatch++;
+                            for (int i = 0; i < 12; i++) {
+                                string id = pool[i].first;      // player ID
+                                int rating = pool[i].second;    // Player rating
+                                BTree.removePlayer(rating, id); 
+                            }
+                            pool.erase(pool.begin(), pool.begin() + 12);
+                        }
                     }
 
-                    while ( queue >= 12)
-                    {
-                        bTreeMatch = bTreeMatch + 1;
-                        queue = queue - 12;
-                    }
                     endTime = clock();
                     bTreeMatchTime = ((endTime - startTime) * 1000.0) / CLOCKS_PER_SEC;
 
