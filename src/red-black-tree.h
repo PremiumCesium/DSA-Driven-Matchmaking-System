@@ -146,6 +146,8 @@ void deleteNode(Node* node){
         root->red = false;
     }
 
+    
+    //Return players with specified rating
     vector<string> findPlayersByRating(int rating) const {
         const Node* current = root;
 
@@ -163,6 +165,8 @@ void deleteNode(Node* node){
     }
 
 
+
+    //For finding elligible players for a match
     vector<pair<string,int>> findPlayersInRange(int minRating, int maxRating) const {
         vector<pair<string, int>> playersInRange;
         
@@ -175,6 +179,8 @@ void deleteNode(Node* node){
 
     }
 
+
+    //After a player is put into a game, they must be removed from the matchmaking list 
     bool removePlayer(int rating, const string& id) {
 
         Node* current = root;
