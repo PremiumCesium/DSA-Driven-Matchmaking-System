@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <utility>
 
 using namespace std;
 
@@ -30,6 +31,28 @@ Node* root = nullptr;
 
 bool isRed(Node* node){
     return node != nullptr && node->isRed();
+}
+
+void getPlayersInRange(Node* node, int minRating, int maxRating, vector<pair<string, int>>& players) const {
+
+    if(!node){
+        return;
+    }
+
+    if(node->rating > minRating){
+        getPlayersInRange(node->left, minRating, maxRating, players);
+    }
+
+    if(node->rating >= minRating && node->rating <= maxRating){
+        for(const string& id : node->player_ids){
+            players.push_back({id, node->rating});
+        }
+    }
+
+    if(node->rating < maxRating){
+        getPlayersInRange(node->right, minRating, maxRating, players);
+    }
+
 }
 
 Node* rotate_left(Node* node){
@@ -137,6 +160,43 @@ void deleteNode(Node* node){
         }
 
         return {};
+    }
+
+
+    vector<pair<string,int>> findPlayersInRange(int minRating, int maxRating) const {
+        vector<pair<string, int>> playersInRange;
+        
+        if(minRating <= maxRating){
+            getPlayersInRange(root, minRating, maxRating, playersInRange);
+        }
+
+
+        return playersInRange;
+
+    }
+
+    bool removePlayer(int rating, const string& id) {
+
+        Node* current = root;
+
+        while(current){
+            if(rating < current->rating){
+                current = current->left;
+            }else if(rating > current->rating){
+                current = current->right;
+            }else{
+                for(auto player = current->player_ids.begin(); player != current->player_ids.end(); ++player){
+                    if(*player == id){
+                        current->player_ids.erase(player);
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        }
+        
+        return false;
     }
 
 };
