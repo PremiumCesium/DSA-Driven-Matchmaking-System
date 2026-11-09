@@ -211,28 +211,24 @@ int main()
             {
                 if(Binserted == true)
                 {
-            
-                    int queue = 0;
-                    int rating = 0;
-
+                    //Red-black tree section
+                
                     redBlackMatch = 0;
 
                     clock_t startTime = clock();
 
-                    while ( rating <= 5000)
-                    {
-                        vector<string> playerRating;
-                        playerRating = RBTree.findPlayersByRating(rating);
-
-                        queue = queue + playerRating.size();
-
-                        rating = rating + 1;
-                    }
-
-                    while ( queue >= 12)
-                    {
-                        redBlackMatch = redBlackMatch + 1;
-                        queue = queue - 12;
+                   for(int minRating = 0; minRating <= 5000; minRating+=100){
+                        int maxRating = minRating+99;
+                        vector<pair<string,int>> pool = RBTree.findPlayersInRange(minRating, maxRating);
+                        while(pool.size()>=12){
+                            redBlackMatch++;
+                            for (int i = 0; i < 12; i++) {
+                                string id = pool[i].first;      // player ID
+                                int rating = pool[i].second;    // Player rating
+                                RBTree.removePlayer(rating, id); 
+                            }
+                            pool.erase(pool.begin(), pool.begin() + 12);
+                        }
                     }
 
                     clock_t endTime = clock();
